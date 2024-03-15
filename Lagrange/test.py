@@ -1,4 +1,4 @@
-from numpy import pi, sin
+from numpy import pi, cos
 
 
 def lagrange(points: list[tuple[float, float]], bp: float) -> float:
@@ -27,17 +27,33 @@ def generate_points(rng: tuple[float, float], count_points: int, function) -> li
 
 
 # В = 15
-# y=2x− cos(x)
-def func(x: float, n: int = 5) -> float:
+
+def func(x: float):
     """
-    Функция
+    Функция y = 2x− cos(x)
 
     :param x: Точка x
-    :param n: Степень производной. Считается от 5 для удобства.
     :return: Значение функции в точке x
 
+    :rtype: float
+
     """
-    return sin(x + (n * pi) / 2)
+    return 2 * x - cos(x)
+
+def derv_func(x: float, n: int = 2) -> float:
+    """
+    Вторая производная функции y = 2x− cos(x)
+
+    От второй производной далее, по тригонометрическим свойствам, можно считать n-ю производную
+
+    :param x: Точка x
+    :param n: Степень производной. Считается от 2 для удобства.
+    :return: Значение функции в точке x
+
+    :rtype: float
+
+    """
+    return cos(x + ((n - 2) * pi) / 2)
 
 
 count_pts = 800
