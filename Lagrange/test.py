@@ -2,17 +2,29 @@ from numpy import pi, cos
 
 
 def lagrange(points: list[tuple[float, float]], bp: float) -> float:
+    """
+    Неньютоновская реализация полинома Лагранжа
+
+    :param points: Список точек
+    :type points: list[tuple[float, float]]
+    :param bp: Точка, значение функции в которой нужно получить
+    :type bp: float
+
+    :return: Значение полинома Лагранжа в точке bp
+    :rtype: float
+
+    """
     count_points = len(points)
     result = 0
     for k, point in enumerate(points):
-        multiply = 1
-        for j in range(k - 1):
+        multiply = point[1]
+        for j in range(0, k - 1 + 1):
             x = points[j][0]
             multiply *= ((bp - x) / (point[0] - x))
         for i in range(k + 1, count_points):
             x = points[i][0]
             multiply *= ((bp - x) / (point[0] - x))
-        result += multiply * point[1]
+        result += multiply
     return result
 
 
