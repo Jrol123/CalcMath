@@ -70,12 +70,12 @@ def derv_func(x: float, n: int = 2) -> float:
     return cos(x + ((n - 2) * pi) / 2)
 
 
-count_pts = 800
+count_pts = 6
 
-range_graph = (-pi, pi)
+range_graph = (-10.0, 10.0)
 
-points = generate_points(range_graph, count_pts, func)
+full_points = generate_points(range_graph, count_pts, func)
 
-bp = pi/2
+keypoint = 0.0
 
-print(f"{bp:.10f}", f"{lagrange(points, bp):.10f}", f"{func(bp, count_pts):.10f}")
+print(f"{keypoint:.10f}", f"{lagrange(full_points, keypoint):.10f}", f"{func(keypoint):.10f}")
