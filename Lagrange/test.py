@@ -17,12 +17,26 @@ def lagrange(points: list[tuple[float, float]], bp: float) -> float:
 
 
 def generate_points(rng: tuple[float, float], count_points: int, function) -> list[tuple[float, float]]:
+    """
+     Генерирование точек с некоторым постоянным шагом
+
+    :param rng: Кортеж границ
+    :type rng: tuple[float, float]
+    :param count_points: Количество точек, которое нужно сгенерировать
+    :type count_points: int
+    :param function: Функция
+    :type function: function
+
+    :return: Список точек
+    :rtype: list[tuple[float, float]]
+
+    """
     step = (rng[1] - rng[0]) / (count_points - 1)
-    res = [(rng[0], function(rng[0], count_points))]
+    res = [(rng[0], function(rng[0]))]
     for i in range(1, count_points - 1):
         x = rng[0] + step * i
-        res.append((x, function(x, count_points)))
-    res.append((rng[1], function(rng[1], count_points)))
+        res.append((x, function(x)))
+    res.append((rng[1], function(rng[1])))
     return res
 
 
