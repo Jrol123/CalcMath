@@ -3,14 +3,7 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
-        <entry key="\points.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\Все значения.csv">
+        <entry key="\Lagrange\points.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
