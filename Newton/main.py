@@ -32,7 +32,7 @@ def newton(rng: tuple[float, float], step: float, count_pts: int, is_fwd: bool =
 
 def check_pos(point: float, points: list[float]) -> tuple[int, float | None]:
     try:
-        return 204, points.index(point)
+        return 100, points.index(point)
     except:
         print(f"{point} is not in the list")
 
@@ -61,7 +61,7 @@ def check_pos(point: float, points: list[float]) -> tuple[int, float | None]:
             return 2, index
         # Если находится посередине между точками
         step = random.randint(0, 1)
-        return 201 * ((-1) ** step), [index - 1, index][1 - step]
+        return 202 * ((-1) ** step), [index - 1, index][1 - step]
 
 
 # 10
