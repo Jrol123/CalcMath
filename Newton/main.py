@@ -31,6 +31,21 @@ def newton(rng: tuple[float, float], step: float, count_pts: int, is_fwd: bool =
 
 
 def check_pos(point: float, points: list[float]) -> tuple[int, float | None]:
+    """
+    Нахождение функции, которая будет использоваться для интерполяции.
+
+    Выбор делается между Ньютоном и Гауссом. Учитываются обе их вариации.
+
+    Также учитывается возможность выхода функции за пределы списка и совпадение точки point с одной из точек в points.
+
+    :param point: Точка, значение функции в которой требуется узнать.
+    :param points: Сетка значений.
+    :return: Возвращается набор из двух значений:
+     статуса, отвечающего за то, какая функция будет выбрана;
+     индекса начальной точки x_0, если таковая применима.
+
+    """
+    """Проверка на нахождение точки в массиве"""
     try:
         return 100, points.index(point)
     except:
@@ -59,7 +74,7 @@ def check_pos(point: float, points: list[float]) -> tuple[int, float | None]:
             return -2, index - 1
         elif diff_1 < diff_2:
             return 2, index
-        # Если находится посередине между точками
+        # Если находится посередине между точками, то выбирается случайный из двух Гауссов
         step = random.randint(0, 1)
         return 202 * ((-1) ** step), [index - 1, index][1 - step]
 
@@ -67,6 +82,7 @@ def check_pos(point: float, points: list[float]) -> tuple[int, float | None]:
 # 10
 count_points = 5
 range_graph = (0.1, 0.6)
-full_points = linspace(*range_graph, count_points).tolist()
-print(full_points)
-print(check_pos(0.4125, full_points))
+x_points = linspace(*range_graph, count_points).tolist()
+res = check_pos(0.4125, x_points)
+print(x_points)
+print(res, x_points[res[1]])
