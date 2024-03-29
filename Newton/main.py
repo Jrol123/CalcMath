@@ -66,7 +66,8 @@ def check_pos(point: float, points: list[float]) -> tuple[int, float | None]:
     # TODO: Сделать проверку на нахождение рядом с определённой точкой
 
 
-count_points = 10
+# 10
+count_points = 5
 range_graph = (0.1, 0.6)
 full_points = linspace(*range_graph, count_points).tolist()
 print(full_points)
