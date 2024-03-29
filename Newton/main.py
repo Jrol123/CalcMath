@@ -3,6 +3,21 @@ import random
 from numpy import cos, sin, pi, linspace
 
 
+class ResponseCode(IntEnum):
+    """
+    Коды состояний
+    """
+    TABLE_POINT = 100
+    OVERFLOW_FWD = 400
+    OVERFLOW_BWD = -OVERFLOW_FWD
+    NEWTON_FWD = 200
+    NEWTON_BWD = - NEWTON_FWD
+    GAUSS_FWD = 202
+    GAUSS_BWD = -GAUSS_FWD
+    LAGRANGE = 500 # TODO: Что делать, если точка находится не рядом с краями и не рядом с центральным элементом?
+
+
+
 # 0.13, 0.56, 0.37
 # (0.1, 0.6)
 # В = 15
