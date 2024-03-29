@@ -29,10 +29,14 @@ def newton(rng: tuple[float, float], step: float, count_pts: int, is_fwd: bool =
 
 
 def check_pos(point: float, points: list[float]) -> tuple:
-    if point in points:
-        # Если точка находится в массиве точек
-        # TODO: Возвращать индекс в массиве
-        return 200, point
+    index_point = None
+    try:
+        index_point = points.index(0)
+    except:
+        print(f"{point} is not in the list")
+    finally:
+        if index_point:
+            return 200, index_point
 
     if point < points[0]:
         return -500, None
@@ -47,10 +51,9 @@ def check_pos(point: float, points: list[float]) -> tuple:
     # TODO: Сделать проверку на нахождение рядом с определённой точкой
 
 
-
 count_points = 10
 range_graph = (0.1, 0.6)
 full_points = linspace(*range_graph, count_points)
-print(check_pos(range_graph, 0.1))
+print(check_pos(0.1, range_graph, ))
 if isinstance(1, float):
     print("flt")
