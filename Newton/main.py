@@ -69,6 +69,5 @@ def check_pos(point: float, points: list[float]) -> tuple[int, float | None]:
 count_points = 10
 range_graph = (0.1, 0.6)
 full_points = linspace(*range_graph, count_points).tolist()
-print(check_pos(0.1, full_points))
-if isinstance(1, float):
-    print("flt")
+print(full_points)
+print(check_pos(0.4125, full_points))
