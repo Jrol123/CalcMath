@@ -1,4 +1,4 @@
-import random
+from random import randint
 from enum import IntEnum
 
 from numpy import cos, sin, pi, linspace
@@ -15,8 +15,7 @@ class ResponseCode(IntEnum):
     NEWTON_BWD = - NEWTON_FWD
     GAUSS_FWD = 202
     GAUSS_BWD = -GAUSS_FWD
-    LAGRANGE = 500 # TODO: Что делать, если точка находится не рядом с краями и не рядом с центральным элементом?
-
+    LAGRANGE = 500  # TODO: Что делать, если точка находится не рядом с краями и не рядом с центральным элементом?
 
 
 # 0.13, 0.56, 0.37
@@ -28,7 +27,7 @@ def func(x: float, deriv_s: int = 0):
 
     При вводе аргумента deriv_s можно выбрать степень производной
 
-    :param x: Точка x
+    :param x: Точка
     :param deriv_s: Степень производной
 
     :return: Значение функции в точке x
@@ -42,7 +41,7 @@ def func(x: float, deriv_s: int = 0):
     return cos(x + ((deriv_s - 2) * pi) / 2)
 
 
-def redirector(point: float, points: list[float], status: tuple[ResponseCode, float | None], count_pts: int):
+def redirector(point: float, points: list[float], status: tuple[ResponseCode, float | None]):
     match (status[0]):
         case ResponseCode.TABLE_POINT:
             return func(point)
@@ -109,7 +108,7 @@ def check_pos(point: float, points: list[float]) -> tuple[ResponseCode, float | 
         elif diff_1 < diff_2:
             return ResponseCode.GAUSS_FWD, index
         # Если находится посередине между точками, то выбирается случайный из двух Гауссов
-        step = random.randint(0, 1)
+        step = randint(0, 1)
         return [ResponseCode.GAUSS_BWD, ResponseCode.GAUSS_FWD][1 - step], [index - 1, index][1 - step]
 
 
@@ -117,6 +116,8 @@ def check_pos(point: float, points: list[float]) -> tuple[ResponseCode, float | 
 count_points = 5
 range_graph = (0.1, 0.6)
 x_points = linspace(*range_graph, count_points).tolist()
-res = check_pos(0.4125, x_points)
+pt = 0.4125
+res = check_pos(pt, x_points)
 print(x_points)
 print(res, x_points[res[1]])
+print(redirector(pt, x_points, res))
