@@ -1,4 +1,5 @@
 import random
+from enum import IntEnum
 
 from numpy import cos, sin, pi, linspace
 
@@ -41,11 +42,29 @@ def func(x: float, deriv_s: int = 0):
     return cos(x + ((deriv_s - 2) * pi) / 2)
 
 
-def newton(rng: tuple[float, float], step: float, count_pts: int, is_fwd: bool = True):
-    pass
+def redirector(point: float, points: list[float], status: tuple[ResponseCode, float | None], count_pts: int):
+    match (status[0]):
+        case ResponseCode.TABLE_POINT:
+            return func(point)
+
+        case ResponseCode.NEWTON_BWD:
+            pass
+        case ResponseCode.NEWTON_FWD:
+            pass
+
+        case ResponseCode.GAUSS_BWD:
+            pass
+        case ResponseCode.GAUSS_FWD:
+            pass
+
+        case ResponseCode.OVERFLOW_BWD:
+            return None
+        case ResponseCode.OVERFLOW_FWD:
+            return None
+        # TODO: Добавить возвращение функций
 
 
-def check_pos(point: float, points: list[float]) -> tuple[int, float | None]:
+def check_pos(point: float, points: list[float]) -> tuple[ResponseCode, float | None]:
     """
     Нахождение функции, которая будет использоваться для интерполяции.
 
@@ -62,21 +81,21 @@ def check_pos(point: float, points: list[float]) -> tuple[int, float | None]:
     """
     """Проверка на нахождение точки в массиве"""
     try:
-        return 100, points.index(point)
+        return ResponseCode.TABLE_POINT, points.index(point)
     except:
         print(f"{point} is not in the list")
 
     """Проверка на выход за пределы"""
     if point < points[0]:
-        return -400, None
+        return ResponseCode.OVERFLOW_BWD, None
     elif point > points[-1]:
-        return 400, None
+        return ResponseCode.OVERFLOW_FWD, None
 
     """Проверка на Ньютона"""
     if point < points[1]:
-        return -200, 0
+        return ResponseCode.NEWTON_BWD, 0
     elif point > points[-2]:
-        return 200, len(points) - 1
+        return ResponseCode.NEWTON_FWD, len(points) - 1
 
     """Проверка на Гаусса"""
     for index in range(2, len(points) - 2 + 1):
@@ -86,12 +105,12 @@ def check_pos(point: float, points: list[float]) -> tuple[int, float | None]:
         if diff_1 < 0 or diff_2 < 0:
             continue
         if diff_1 > diff_2:
-            return -2, index - 1
+            return ResponseCode.GAUSS_BWD, index - 1
         elif diff_1 < diff_2:
-            return 2, index
+            return ResponseCode.GAUSS_FWD, index
         # Если находится посередине между точками, то выбирается случайный из двух Гауссов
         step = random.randint(0, 1)
-        return 202 * ((-1) ** step), [index - 1, index][1 - step]
+        return [ResponseCode.GAUSS_BWD, ResponseCode.GAUSS_FWD][1 - step], [index - 1, index][1 - step]
 
 
 # 10
