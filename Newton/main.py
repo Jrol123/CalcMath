@@ -31,6 +31,7 @@ def newton(rng: tuple[float, float], step: float, count_pts: int, is_fwd: bool =
 def check_pos(point: float, points: list[float]) -> tuple:
     if point in points:
         # Если точка находится в массиве точек
+        # TODO: Возвращать индекс в массиве
         return 200, point
 
     if point < points[0]:
@@ -42,6 +43,8 @@ def check_pos(point: float, points: list[float]) -> tuple:
         return -1
     elif point > points[-2]:
         return 1
+
+    # TODO: Сделать проверку на нахождение рядом с определённой точкой
 
 
 
