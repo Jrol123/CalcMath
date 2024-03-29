@@ -1,3 +1,5 @@
+import random
+
 from numpy import cos, sin, pi, linspace
 
 
@@ -28,27 +30,38 @@ def newton(rng: tuple[float, float], step: float, count_pts: int, is_fwd: bool =
     pass
 
 
-def check_pos(point: float, points: list[float]) -> tuple:
+def check_pos(point: float, points: list[float]) -> tuple[int, float | None]:
     try:
-        return 200, points.index(point)
+        return 204, points.index(point)
     except:
         print(f"{point} is not in the list")
 
     """Проверка на выход за пределы"""
     if point < points[0]:
-        return -500, None
+        return -400, None
     elif point > points[-1]:
-        return 500, None
+        return 400, None
 
     """Проверка на Ньютона"""
     if point < points[1]:
-        return -1, 0
+        return -200, 0
     elif point > points[-2]:
-        return 1, len(points) - 1
+        return 200, len(points) - 1
 
     """Проверка на Гаусса"""
-
-
+    for index in range(2, len(points) - 2 + 1):
+        # Исключаем первую и последнюю точки
+        diff_1 = point - points[index - 1]
+        diff_2 = points[index] - point
+        if diff_1 < 0 or diff_2 < 0:
+            continue
+        if diff_1 > diff_2:
+            return -2, index - 1
+        elif diff_1 < diff_2:
+            return 2, index
+        # Если находится посередине между точками
+        step = random.randint(0, 1)
+        return 201 * ((-1) ** step), [index - 1, index][step]
 
     # TODO: Сделать проверку на нахождение рядом с определённой точкой
 
