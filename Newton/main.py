@@ -61,9 +61,7 @@ def check_pos(point: float, points: list[float]) -> tuple[int, float | None]:
             return 2, index
         # Если находится посередине между точками
         step = random.randint(0, 1)
-        return 201 * ((-1) ** step), [index - 1, index][step]
-
-    # TODO: Сделать проверку на нахождение рядом с определённой точкой
+        return 201 * ((-1) ** step), [index - 1, index][1 - step]
 
 
 # 10
