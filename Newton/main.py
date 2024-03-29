@@ -29,14 +29,10 @@ def newton(rng: tuple[float, float], step: float, count_pts: int, is_fwd: bool =
 
 
 def check_pos(point: float, points: list[float]) -> tuple:
-    index_point = None
     try:
-        index_point = points.index(0)
+        return 200, points.index(point)
     except:
         print(f"{point} is not in the list")
-    finally:
-        if index_point:
-            return 200, index_point
 
     if point < points[0]:
         return -500, None
