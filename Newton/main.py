@@ -1,7 +1,7 @@
 from numpy import cos, sin, pi, linspace
 
 
-# 0.44, 0.13, 0.56, 0.37
+# 0.13, 0.56, 0.37
 # (0.1, 0.6)
 # В = 15
 def func(x: float, deriv_s: int = 0):
@@ -34,22 +34,28 @@ def check_pos(point: float, points: list[float]) -> tuple:
     except:
         print(f"{point} is not in the list")
 
+    """Проверка на выход за пределы"""
     if point < points[0]:
         return -500, None
     elif point > points[-1]:
         return 500, None
 
+    """Проверка на Ньютона"""
     if point < points[1]:
-        return -1
+        return -1, 0
     elif point > points[-2]:
-        return 1
+        return 1, len(points) - 1
+
+    """Проверка на Гаусса"""
+
+
 
     # TODO: Сделать проверку на нахождение рядом с определённой точкой
 
 
 count_points = 10
 range_graph = (0.1, 0.6)
-full_points = linspace(*range_graph, count_points)
-print(check_pos(0.1, range_graph, ))
+full_points = linspace(*range_graph, count_points).tolist()
+print(check_pos(0.1, full_points))
 if isinstance(1, float):
     print("flt")
