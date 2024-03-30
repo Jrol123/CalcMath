@@ -88,8 +88,10 @@ def check_pos(point: float, points: list[float]) -> tuple[ResponseCode, float | 
 
     """Проверка на выход за пределы"""
     if point < points[0]:
+        print(f"{point} is too small")
         return ResponseCode.OVERFLOW_BWD, None
     elif point > points[-1]:
+        print(f"{point} is too large")
         return ResponseCode.OVERFLOW_FWD, None
 
     """Проверка на Ньютона"""
@@ -119,7 +121,10 @@ count_points = 5
 range_graph = (0.1, 0.6)
 x_points = linspace(*range_graph, count_points).tolist()
 pt = 0.4125
-res = check_pos(pt, x_points)
-print(x_points)
-print(res, x_points[res[1]])
-print(redirector(pt, x_points, res))
+pt = 0.7
+state = check_pos(pt, x_points)
+# print(x_points)
+# print(state, x_points[state[1]])
+result = redirector(pt, x_points, state)
+if result is None:
+    print(f"Невозможно подобрать функцию при количестве точек = {max_count_points}")
