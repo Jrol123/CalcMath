@@ -58,7 +58,6 @@ def redirector(point: float, points: list[float], status: tuple[ResponseCode, fl
       None, если функция не была найдена.
 
     """
-    print(status[0])
     match (status[0]):
         case ResponseCode.TABLE_POINT:
             return func(point)
@@ -146,7 +145,7 @@ def check_pos(point: float, points: list[float]) -> tuple[ResponseCode, float | 
     #     return [ResponseCode.GAUSS_BWD, ResponseCode.GAUSS_FWD][1 - step], [index - 1, index][1 - step]
 
 
-mass_points = [0.13, 0.58, 0.37]
+mass_points = [0.1, 0.13, 0.58, 0.37]  # 0.1 тестовая точка
 range_graph = (0.1, 0.6)
 
 for cur_point in mass_points:
@@ -158,8 +157,10 @@ for cur_point in mass_points:
         state = check_pos(cur_point, x_points)
         result = redirector(cur_point, x_points, state)
         if result is None:
-            print(f"Невозможно подобрать функцию при количестве точек = {cur_count_points}")
+            print(f"Невозможно подобрать функцию для точки {cur_point} при количестве точек = {cur_count_points}",
+                  f"Ошибка: {state[0].name}", sep="\t")
             continue
         else:
+            print(f"Удалось подобрать функцию для точки {cur_point} при количестве точек = {cur_count_points}",
+                  f"Функция: {state[0].name}", sep="\t")
             break
-        pass
