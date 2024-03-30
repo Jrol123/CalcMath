@@ -77,6 +77,8 @@ def redirector(point: float, points: list[float], step: float, mass_fin_dir: lis
 
     :param point: Точка, значение функции в которой требуется узнать.
     :param points: Сетка значений.
+    :param step: Шаг сетки.
+    :param mass_fin_dir: Массив конечных разностей
     :param status: Статус выполнения подбора функции.
      В зависимости от статуса происходит переадресация
 
@@ -204,9 +206,9 @@ mass_fin_diff = []
 for i in range(10, 3 - 1, -1):
     mass_fin_diff.append(get_fin_diff(func, (linspace(*range_graph, i)).tolist()))
 
-pprint(mass_fin_diff, compact=True)
+# pprint(mass_fin_diff, compact=True)
 
-for cur_point in mass_points:
+for index, cur_point in enumerate(mass_points):
     # <=10
     for cur_count_points in range(5, 3 - 1, -1):
         step_grid = (range_graph[1] - range_graph[0]) / (cur_count_points - 1)
@@ -215,7 +217,7 @@ for cur_point in mass_points:
         """Точки сетки"""
 
         state = check_pos(cur_point, x_points)
-        result = redirector(cur_point, x_points, state)
+        result = redirector(cur_point, x_points, step_grid, mass_fin_diff[10 - cur_count_points], state)
         if result is None:
             print(f"Невозможно подобрать функцию для точки {cur_point} при количестве точек = {cur_count_points}",
                   f"Ошибка: {state[0].name}", sep="\t")
