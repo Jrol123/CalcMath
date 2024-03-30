@@ -56,8 +56,9 @@ def redirector(point: float, points: list[float], status: tuple[ResponseCode, fl
 
      :return: Значение полинома для точки point.
       None, если функция не была найдена.
-    
+
     """
+    print(status[0])
     match (status[0]):
         case ResponseCode.TABLE_POINT:
             return func(point)
@@ -159,4 +160,6 @@ for cur_point in mass_points:
         if result is None:
             print(f"Невозможно подобрать функцию при количестве точек = {cur_count_points}")
             continue
+        else:
+            break
         pass
