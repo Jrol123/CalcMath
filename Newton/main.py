@@ -118,8 +118,10 @@ def check_pos(point: float, points: list[float]) -> tuple[ResponseCode, float | 
 
 # 10
 count_points = 5
+# <=10
+max_count_points = 5
 range_graph = (0.1, 0.6)
-x_points = linspace(*range_graph, count_points).tolist()
+x_points = linspace(*range_graph, max_count_points).tolist()
 pt = 0.4125
 pt = 0.7
 state = check_pos(pt, x_points)
