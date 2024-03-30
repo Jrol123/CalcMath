@@ -215,6 +215,7 @@ for index, cur_point in enumerate(mass_points):
         """Шаг сетки"""
         x_points = linspace(*range_graph, cur_count_points).tolist()
         """Точки сетки"""
+        # TODO: Вытащить шаг сетки и её точки в отдельную переменную, как с конечными разностями
 
         state = check_pos(cur_point, x_points)
         result = redirector(cur_point, x_points, step_grid, mass_fin_diff[10 - cur_count_points], state)
