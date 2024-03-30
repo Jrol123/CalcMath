@@ -20,8 +20,6 @@ class ResponseCode(IntEnum):
     NO_FUNC = 404  # TODO: Что делать, если точка находится не рядом с краями и не рядом с центральным элементом?
 
 
-# 0.13, 0.56, 0.37
-# (0.1, 0.6)
 # В = 15
 def func(x: float, deriv_s: int = 0):
     """
@@ -41,6 +39,22 @@ def func(x: float, deriv_s: int = 0):
     elif deriv_s == 1:
         return x + sin(x)
     return cos(x + ((deriv_s - 2) * pi) / 2)
+
+
+def newton_bwd(point: float, points: list[float]):
+    pass
+
+
+def newton_fwd(point: float, points: list[float]):
+    pass
+
+
+def gauss_bwd(point: float, points: list[float]):
+    pass
+
+
+def gauss_fwd(point: float, points: list[float]):
+    pass
 
 
 def redirector(point: float, points: list[float], status: tuple[ResponseCode, float | None]) -> float | None:
@@ -63,14 +77,14 @@ def redirector(point: float, points: list[float], status: tuple[ResponseCode, fl
             return func(point)
 
         case ResponseCode.NEWTON_BWD:
-            pass
+            return newton_bwd(point, points)
         case ResponseCode.NEWTON_FWD:
-            pass
+            return newton_fwd(point, points)
 
         case ResponseCode.GAUSS_BWD:
-            pass
+            return gauss_bwd(point, points)
         case ResponseCode.GAUSS_FWD:
-            pass
+            return gauss_fwd(point, points)
 
         case ResponseCode.OVERFLOW_BWD:
             return None
