@@ -1,4 +1,5 @@
 from enum import IntEnum
+from math import factorial
 from pprint import pprint
 
 from numpy import cos, sin, pi, linspace
@@ -44,11 +45,18 @@ def func(x: float, deriv_s: int = 0):
     return cos(x + ((deriv_s - 2) * pi) / 2)
 
 
+def newton_fwd(point: float, points: list[float], step: float, mass_fin_dir: list[list[float]]) -> float:
+    t = (point - points[0]) / step
+    result = 0
+    for i, pt in enumerate(points):
+        mult = mass_fin_dir[i][0]
+        for j in range(0, i - 1 + 1):
+            mult *= (t - j)
+        result += (mult / factorial(i))
+    return result
+
+
 def newton_bwd(point: float, points: list[float]):
-    pass
-
-
-def newton_fwd(point: float, points: list[float]):
     pass
 
 
@@ -129,9 +137,9 @@ def check_pos(point: float, points: list[float]) -> tuple[ResponseCode, float | 
 
     """Проверка на Ньютона"""
     if point < points[1]:
-        return ResponseCode.NEWTON_BWD, 0
+        return ResponseCode.NEWTON_FWD, 0
     elif point > points[-2]:
-        return ResponseCode.NEWTON_FWD, len(points) - 1
+        return ResponseCode.NEWTON_BWD, len(points) - 1
 
     """Проверка на Гаусса"""
     if len(points) % 2 == 0:
