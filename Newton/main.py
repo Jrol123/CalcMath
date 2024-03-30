@@ -15,7 +15,7 @@ class ResponseCode(IntEnum):
     NEWTON_BWD = - NEWTON_FWD
     GAUSS_FWD = 202
     GAUSS_BWD = -GAUSS_FWD
-    NOT_NG = 404  # TODO: Что делать, если точка находится не рядом с краями и не рядом с центральным элементом?
+    NO_FUNC = 404  # TODO: Что делать, если точка находится не рядом с краями и не рядом с центральным элементом?
 
 
 # 0.13, 0.56, 0.37
@@ -60,7 +60,7 @@ def redirector(point: float, points: list[float], status: tuple[ResponseCode, fl
             return None
         case ResponseCode.OVERFLOW_FWD:
             return None
-        case ResponseCode.NOT_NG:
+        case ResponseCode.NO_FUNC:
             return None
         # TODO: Добавить возвращение функций
 
@@ -103,7 +103,7 @@ def check_pos(point: float, points: list[float]) -> tuple[ResponseCode, float | 
     """Проверка на Гаусса"""
     if len(points) % 2 == 0:
         # TODO: Разобраться, почему Гаусс берётся только от центра, а Ньютон только от краёв
-        return ResponseCode.NOT_NG, None
+        return ResponseCode.NO_FUNC, None
     index = (len(points) - 1) // 2
     diff_1 = (points[index] + points[index - 1]) / 2
     diff_2 = (points[index + 1] + points[index]) / 2
@@ -112,7 +112,7 @@ def check_pos(point: float, points: list[float]) -> tuple[ResponseCode, float | 
     elif diff_2 >= point > points[index]:
         return ResponseCode.GAUSS_BWD, index
 
-    return ResponseCode.NOT_NG, None
+    return ResponseCode.NO_FUNC, None
 
     # for index in range(2, len(points) - 2 + 1):
     #     # Исключаем первую и последнюю точки
