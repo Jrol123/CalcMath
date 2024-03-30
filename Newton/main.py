@@ -1,4 +1,5 @@
 from enum import IntEnum
+from pprint import pprint
 
 from numpy import cos, sin, pi, linspace
 
@@ -159,8 +160,29 @@ def check_pos(point: float, points: list[float]) -> tuple[ResponseCode, float | 
     #     return [ResponseCode.GAUSS_BWD, ResponseCode.GAUSS_FWD][1 - step], [index - 1, index][1 - step]
 
 
+def get_fin_diff(function, points: list[float]) -> list[list[float]]:
+    count_pts = len(points)
+    mass = [[0 for _ in range(10 - i)] for i in range(count_pts)]
+    for i in range(count_pts):
+        mass[0][i] = (function(points[i]))
+    for i in range(1, count_pts - 1 + 1):
+        for j in range(0, 10 - i - 1 + 1):
+            mass[i][j] = (function(points[j]) - function(points[j + 1]))
+    return mass
+
+
 mass_points = [0.1, 0.13, 0.58, 0.37]  # 0.1 тестовая точка
 range_graph = (0.1, 0.6)
+
+"""Поскольку по условию сказано взять максимальное количество точек,
+ то необходимо сгенерировать конечные разности для каждого случая"""
+
+mass_fin_diff = []
+
+for i in range(10, 3 - 1, -1):
+    mass_fin_diff.append(get_fin_diff(func, (linspace(*range_graph, i)).tolist()))
+
+pprint(mass_fin_diff, compact=True)
 
 for cur_point in mass_points:
     # <=10
