@@ -163,13 +163,24 @@ def check_pos(point: float, points: list[float]) -> tuple[ResponseCode, float | 
 
 
 def get_fin_diff(function, points: list[float]) -> list[list[float]]:
+    """
+    Вычисление конечных разностей.
+
+    :param function: Функция
+    :type function: function
+    :param points: Список узлов
+
+    :return: Список списков конечных разностей.
+     Список конечных разностей поделён на подсписки степеней конечных разностей.
+
+    """
     count_pts = len(points)
-    mass = [[0 for _ in range(10 - i)] for i in range(count_pts)]
+    mass = [[0 for _ in range(count_pts - i)] for i in range(count_pts)]
     for i in range(count_pts):
         mass[0][i] = (function(points[i]))
     for i in range(1, count_pts - 1 + 1):
-        for j in range(0, 10 - i - 1 + 1):
-            mass[i][j] = (function(points[j]) - function(points[j + 1]))
+        for j in range(0, count_pts - i - 1 + 1):
+            mass[i][j] = (mass[i - 1][j + 1] - mass[i - 1][j])
     return mass
 
 
