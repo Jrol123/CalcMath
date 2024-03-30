@@ -60,15 +60,16 @@ def newton_bwd(point: float, points: list[float]):
     pass
 
 
-def gauss_bwd(point: float, points: list[float]):
-    pass
-
-
 def gauss_fwd(point: float, points: list[float]):
     pass
 
 
-def redirector(point: float, points: list[float], status: tuple[ResponseCode, float | None]) -> float | None:
+def gauss_bwd(point: float, points: list[float]):
+    pass
+
+
+def redirector(point: float, points: list[float], step: float, mass_fin_dir: list[list[float]],
+               status: tuple[ResponseCode, float | None]) -> float | None:
     """
     Функция-переадресовщик.
 
@@ -90,7 +91,7 @@ def redirector(point: float, points: list[float], status: tuple[ResponseCode, fl
         case ResponseCode.NEWTON_BWD:
             return newton_bwd(point, points)
         case ResponseCode.NEWTON_FWD:
-            return newton_fwd(point, points)
+            return newton_fwd(point, points, step, mass_fin_dir)
 
         case ResponseCode.GAUSS_BWD:
             return gauss_bwd(point, points)
@@ -207,8 +208,8 @@ pprint(mass_fin_diff, compact=True)
 
 for cur_point in mass_points:
     # <=10
-    for cur_count_points in range(10, 3 - 1, -1):
-        step = (range_graph[1] - range_graph[0]) / (cur_count_points - 1)
+    for cur_count_points in range(5, 3 - 1, -1):
+        step_grid = (range_graph[1] - range_graph[0]) / (cur_count_points - 1)
         """Шаг сетки"""
         x_points = linspace(*range_graph, cur_count_points).tolist()
         """Точки сетки"""
