@@ -15,7 +15,7 @@ class ResponseCode(IntEnum):
     NEWTON_BWD = - NEWTON_FWD
     GAUSS_FWD = 202
     GAUSS_BWD = -GAUSS_FWD
-    LAGRANGE = 500  # TODO: Что делать, если точка находится не рядом с краями и не рядом с центральным элементом?
+    NOT_NG = 404  # TODO: Что делать, если точка находится не рядом с краями и не рядом с центральным элементом?
 
 
 # 0.13, 0.56, 0.37
@@ -59,6 +59,8 @@ def redirector(point: float, points: list[float], status: tuple[ResponseCode, fl
         case ResponseCode.OVERFLOW_BWD:
             return None
         case ResponseCode.OVERFLOW_FWD:
+            return None
+        case ResponseCode.NOT_NG:
             return None
         # TODO: Добавить возвращение функций
 
