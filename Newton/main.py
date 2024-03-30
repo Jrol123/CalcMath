@@ -131,15 +131,18 @@ def check_pos(point: float, points: list[float]) -> tuple[ResponseCode, float | 
     #     return [ResponseCode.GAUSS_BWD, ResponseCode.GAUSS_FWD][1 - step], [index - 1, index][1 - step]
 
 
-# <=10
-max_count_points = 5
+mass_points = [0.13, 0.58, 0.37]
 range_graph = (0.1, 0.6)
-x_points = linspace(*range_graph, max_count_points).tolist()
-pt = 0.4125
-pt = 0.7
-state = check_pos(pt, x_points)
-# print(x_points)
-# print(state, x_points[state[1]])
-result = redirector(pt, x_points, state)
-if result is None:
-    print(f"Невозможно подобрать функцию при количестве точек = {max_count_points}")
+
+for cur_point in mass_points:
+    # <=10
+    for cur_count_points in range(10, 5 - 1, -1):
+        step = (range_graph[1] - range_graph[0]) / (cur_count_points - 1)
+        x_points = linspace(*range_graph, cur_count_points).tolist()
+
+        state = check_pos(cur_point, x_points)
+        result = redirector(cur_point, x_points, state)
+        if result is None:
+            print(f"Невозможно подобрать функцию при количестве точек = {cur_count_points}")
+            continue
+        pass
