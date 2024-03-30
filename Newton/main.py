@@ -3,6 +3,8 @@ from pprint import pprint
 
 from numpy import cos, sin, pi, linspace
 
+import pandas as pd
+
 
 # from random import randint
 
