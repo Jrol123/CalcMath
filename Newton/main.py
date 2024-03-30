@@ -101,23 +101,34 @@ def check_pos(point: float, points: list[float]) -> tuple[ResponseCode, float | 
         return ResponseCode.NEWTON_FWD, len(points) - 1
 
     """Проверка на Гаусса"""
-    for index in range(2, len(points) - 2 + 1):
-        # Исключаем первую и последнюю точки
-        diff_1 = point - points[index - 1]
-        diff_2 = points[index] - point
-        if diff_1 < 0 or diff_2 < 0:
-            continue
-        if diff_1 > diff_2:
-            return ResponseCode.GAUSS_BWD, index - 1
-        elif diff_1 < diff_2:
-            return ResponseCode.GAUSS_FWD, index
-        # Если находится посередине между точками, то выбирается случайный из двух Гауссов
-        step = randint(0, 1)
-        return [ResponseCode.GAUSS_BWD, ResponseCode.GAUSS_FWD][1 - step], [index - 1, index][1 - step]
+    if len(points) % 2 == 0:
+        # TODO: Разобраться, почему Гаусс берётся только от центра, а Ньютон только от краёв
+        return ResponseCode.NOT_NG, None
+    index = (len(points) - 1) // 2
+    diff_1 = (points[index] + points[index - 1]) / 2
+    diff_2 = (points[index + 1] + points[index]) / 2
+    if diff_1 <= point < points[index]:
+        return ResponseCode.GAUSS_FWD, index
+    elif diff_2 >= point > points[index]:
+        return ResponseCode.GAUSS_BWD, index
+
+    return ResponseCode.NOT_NG, None
+
+    # for index in range(2, len(points) - 2 + 1):
+    #     # Исключаем первую и последнюю точки
+    #     diff_1 = point - points[index - 1]
+    #     diff_2 = points[index] - point
+    #     if diff_1 < 0 or diff_2 < 0:
+    #         continue
+    #     if diff_1 > diff_2:
+    #         return ResponseCode.GAUSS_BWD, index - 1
+    #     elif diff_1 < diff_2:
+    #         return ResponseCode.GAUSS_FWD, index
+    #     # Если находится посередине между точками, то выбирается случайный из двух Гауссов
+    #     step = randint(0, 1)
+    #     return [ResponseCode.GAUSS_BWD, ResponseCode.GAUSS_FWD][1 - step], [index - 1, index][1 - step]
 
 
-# 10
-count_points = 5
 # <=10
 max_count_points = 5
 range_graph = (0.1, 0.6)
