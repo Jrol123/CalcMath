@@ -150,9 +150,11 @@ range_graph = (0.1, 0.6)
 
 for cur_point in mass_points:
     # <=10
-    for cur_count_points in range(10, 5 - 1, -1):
+    for cur_count_points in range(10, 3 - 1, -1):
         step = (range_graph[1] - range_graph[0]) / (cur_count_points - 1)
+        """Шаг сетки"""
         x_points = linspace(*range_graph, cur_count_points).tolist()
+        """Точки сетки"""
 
         state = check_pos(cur_point, x_points)
         result = redirector(cur_point, x_points, state)
@@ -162,5 +164,5 @@ for cur_point in mass_points:
             continue
         else:
             print(f"Удалось подобрать функцию для точки {cur_point} при количестве точек = {cur_count_points}",
-                  f"Функция: {state[0].name}", sep="\t")
+                  f"Функция: {state[0].name}", f"Результат: {result}", sep="\t")
             break
