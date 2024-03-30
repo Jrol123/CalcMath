@@ -43,7 +43,21 @@ def func(x: float, deriv_s: int = 0):
     return cos(x + ((deriv_s - 2) * pi) / 2)
 
 
-def redirector(point: float, points: list[float], status: tuple[ResponseCode, float | None]):
+def redirector(point: float, points: list[float], status: tuple[ResponseCode, float | None]) -> float | None:
+    """
+    Функция-переадресовщик.
+
+    Переадресует запрос в зависимости от статуса.
+
+    :param point: Точка, значение функции в которой требуется узнать.
+    :param points: Сетка значений.
+    :param status: Статус выполнения подбора функции.
+     В зависимости от статуса происходит переадресация
+
+     :return: Значение полинома для точки point.
+      None, если функция не была найдена.
+    
+    """
     match (status[0]):
         case ResponseCode.TABLE_POINT:
             return func(point)
