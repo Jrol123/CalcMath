@@ -47,8 +47,11 @@ def func(x: float, deriv_s: int = 0):
 
 def newton_fwd(point: float, points: list[float], step: float, mass_fin_dir: list[list[float]]) -> float:
     t = (point - points[0]) / step
+    if t > 1 or t < 0:
+        print("ALARM!", f"{point} IS BROKEN FOR NEWTON_FWD!", f"t = {t}!", sep="\t")
+        return -404
     result = 0
-    for i, pt in enumerate(points):
+    for i in range(len(points)):
         mult = mass_fin_dir[i][0]
         for j in range(0, i - 1 + 1):
             mult *= (t - j)
@@ -56,8 +59,18 @@ def newton_fwd(point: float, points: list[float], step: float, mass_fin_dir: lis
     return result
 
 
-def newton_bwd(point: float, points: list[float]):
-    pass
+def newton_bwd(point: float, points: list[float], step: float, mass_fin_dir: list[list[float]]) -> float:
+    t = (point - points[-1]) / step
+    if t < -1 or t > 0:
+        print("ALARM!", f"{point} IS BROKEN FOR NEWTON_BWD!", f"t = {t}!", sep="\t")
+        return -404
+    result = 0
+    for i in range(len(points)):
+        mult = mass_fin_dir[i][-1]
+        for j in range(0, i - 1 + 1):
+            mult *= (t + j)
+        result += (mult/factorial(i))
+    return result
 
 
 def gauss_fwd(point: float, points: list[float]):
@@ -91,7 +104,7 @@ def redirector(point: float, points: list[float], step: float, mass_fin_dir: lis
             return func(point)
 
         case ResponseCode.NEWTON_BWD:
-            return newton_bwd(point, points)
+            return newton_bwd(point, points, step, mass_fin_dir)
         case ResponseCode.NEWTON_FWD:
             return newton_fwd(point, points, step, mass_fin_dir)
 
