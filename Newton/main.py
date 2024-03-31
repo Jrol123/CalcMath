@@ -69,30 +69,60 @@ def newton_bwd(point: float, points: list[float], step: float, mass_fin_dir: lis
         mult = mass_fin_dir[i][-1]
         for j in range(0, i - 1 + 1):
             mult *= (t + j)
-        result += (mult/factorial(i))
+        result += (mult / factorial(i))
     return result
 
 
 def gauss_fwd(point: float, points: list[float], step: float, mass_fin_dir: list[list[float]]) -> float:
-    t = (points[(len(points) - 1) // 2] - point) / step
+    t = (point - points[(len(points) - 1) // 2]) / step
     if not 0 < t < 0.5:
         print("ALARM!", f"{point} IS BROKEN FOR GAUSS_FWD!", f"t = {t}!", sep="\t")
         return -404
+    result = 0
+    for i in range(len(points)):
+
+        fin_diff_step = mass_fin_dir[i]
+        if i % 2 == 0:
+            diff_index = (len(fin_diff_step) - 1) // 2
+        else:
+            """Идти наверх"""
+            diff_index = (len(fin_diff_step)) // 2 - 1
+
+        mult = fin_diff_step[diff_index]
+        for j in range(0, i - 1 + 1):
+            if j % 2 != 0:
+                mult *= (t - (j + 1) / 2)
+            else:
+                mult *= (t + (j + 1) / 2)
+        result += (mult / factorial(i))
+
+    return result
 
 
 def gauss_bwd(point: float, points: list[float], step: float, mass_fin_dir: list[list[float]]) -> float:
-    t = (points[(len(points) - 1) // 2] - point) / step
+    t = (point - points[(len(points) - 1) // 2]) / step
     if not 0 > t > -0.5:
         print("ALARM!", f"{point} IS BROKEN FOR GAUSS_BWD!", f"t = {t}!", sep="\t")
         return -404
     result = 0
     for i in range(len(points)):
+
+        fin_diff_step = mass_fin_dir[i]
         if i % 2 == 0:
-            pass
+            diff_index = (len(fin_diff_step) - 1) // 2
+        else:
+            """Идти вниз"""
+            diff_index = len(fin_diff_step) // 2
+
+        mult = fin_diff_step[diff_index]
+        for j in range(0, i - 1 + 1):
+            if j % 2 != 0:
+                mult *= (t + (j + 1) / 2)
+            else:
+                mult *= (t - (j + 1) / 2)
+        result += (mult / factorial(i))
 
     return result
-
-
 
 
 def redirector(point: float, points: list[float], step: float, mass_fin_dir: list[list[float]],
@@ -179,9 +209,9 @@ def check_pos(point: float, points: list[float]) -> tuple[ResponseCode, float | 
     diff_1 = (points[index] + points[index - 1]) / 2
     diff_2 = (points[index + 1] + points[index]) / 2
     if diff_1 <= point < points[index]:
-        return ResponseCode.GAUSS_FWD, index
-    elif diff_2 >= point > points[index]:
         return ResponseCode.GAUSS_BWD, index
+    elif diff_2 >= point > points[index]:
+        return ResponseCode.GAUSS_FWD, index
 
     return ResponseCode.NO_FUNC, None
 
@@ -225,13 +255,15 @@ def get_fin_diff(function, points: list[float]) -> list[list[float]]:
 mass_points = [0.1, 0.13, 0.58, 0.37]  # 0.1 тестовая точка
 range_graph = (0.1, 0.6)
 
-"""Поскольку по условию сказано взять максимальное количество точек,
- то необходимо сгенерировать конечные разности для каждого случая"""
-
 mass_fin_diff = []
 mass_grid = []
 
-for index in range(10, 3 - 1, -1):
+MAX_COUNT_POINTS = 5
+"""Максимальное количество точек"""
+
+"""Поскольку по условию сказано взять максимальное количество точек,
+ то необходимо сгенерировать конечные разности для каждого случая"""
+for index in range(MAX_COUNT_POINTS, 3 - 1, -1):
     mass_fin_diff.append(get_fin_diff(func, (linspace(*range_graph, index)).tolist()))
     step_grid = (range_graph[1] - range_graph[0]) / (index - 1)
     """Шаг сетки"""
@@ -246,7 +278,7 @@ for index, cur_point in enumerate(mass_points):
 
         step_grid, x_points = grid
         # <=10
-        cur_count_points = 10 - sub_index
+        cur_count_points = MAX_COUNT_POINTS - sub_index
 
         state = check_pos(cur_point, x_points)
         result = redirector(cur_point, x_points, step_grid, mass_fin_diff[sub_index], state)
