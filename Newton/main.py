@@ -215,27 +215,27 @@ range_graph = (0.1, 0.6)
  то необходимо сгенерировать конечные разности для каждого случая"""
 
 mass_fin_diff = []
-mass_grid_step = []
+mass_grid = []
 
 for index in range(10, 3 - 1, -1):
     mass_fin_diff.append(get_fin_diff(func, (linspace(*range_graph, index)).tolist()))
     step_grid = (range_graph[1] - range_graph[0]) / (index - 1)
+    """Шаг сетки"""
     x_points = linspace(*range_graph, index).tolist()
-    mass_grid_step.append((step_grid, x_points))
+    """Точки сетки"""
+    mass_grid.append((step_grid, x_points))
 
 # pprint(mass_fin_diff, compact=True)
 
 for index, cur_point in enumerate(mass_points):
-    # <=10
-    for cur_count_points in range(10, 3 - 1, -1):
-        step_grid = (range_graph[1] - range_graph[0]) / (cur_count_points - 1)
-        """Шаг сетки"""
-        x_points = linspace(*range_graph, cur_count_points).tolist()
-        """Точки сетки"""
-        # TODO: Вытащить шаг сетки и её точки в отдельную переменную, как с конечными разностями
+    for sub_index, grid in enumerate(mass_grid):
+
+        step_grid, x_points = grid
+        # <=10
+        cur_count_points = 10 - sub_index
 
         state = check_pos(cur_point, x_points)
-        result = redirector(cur_point, x_points, step_grid, mass_fin_diff[10 - cur_count_points], state)
+        result = redirector(cur_point, x_points, step_grid, mass_fin_diff[sub_index], state)
         if result is None:
             print(f"Невозможно подобрать функцию для точки {cur_point} при количестве точек = {cur_count_points}",
                   f"Ошибка: {state[0].name}", sep="\t")
