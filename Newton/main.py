@@ -73,12 +73,26 @@ def newton_bwd(point: float, points: list[float], step: float, mass_fin_dir: lis
     return result
 
 
-def gauss_fwd(point: float, points: list[float]):
-    pass
+def gauss_fwd(point: float, points: list[float], step: float, mass_fin_dir: list[list[float]]) -> float:
+    t = (points[(len(points) - 1) // 2] - point) / step
+    if not 0 < t < 0.5:
+        print("ALARM!", f"{point} IS BROKEN FOR GAUSS_FWD!", f"t = {t}!", sep="\t")
+        return -404
 
 
-def gauss_bwd(point: float, points: list[float]):
-    pass
+def gauss_bwd(point: float, points: list[float], step: float, mass_fin_dir: list[list[float]]) -> float:
+    t = (points[(len(points) - 1) // 2] - point) / step
+    if not 0 > t > -0.5:
+        print("ALARM!", f"{point} IS BROKEN FOR GAUSS_BWD!", f"t = {t}!", sep="\t")
+        return -404
+    result = 0
+    for i in range(len(points)):
+        if i % 2 == 0:
+            pass
+
+    return result
+
+
 
 
 def redirector(point: float, points: list[float], step: float, mass_fin_dir: list[list[float]],
@@ -109,9 +123,9 @@ def redirector(point: float, points: list[float], step: float, mass_fin_dir: lis
             return newton_fwd(point, points, step, mass_fin_dir)
 
         case ResponseCode.GAUSS_BWD:
-            return gauss_bwd(point, points)
+            return gauss_bwd(point, points, step, mass_fin_dir)
         case ResponseCode.GAUSS_FWD:
-            return gauss_fwd(point, points)
+            return gauss_fwd(point, points, step, mass_fin_dir)
 
         case ResponseCode.OVERFLOW_BWD:
             return None
