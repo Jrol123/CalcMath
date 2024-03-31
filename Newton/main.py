@@ -202,15 +202,19 @@ range_graph = (0.1, 0.6)
  то необходимо сгенерировать конечные разности для каждого случая"""
 
 mass_fin_diff = []
+mass_grid_step = []
 
-for i in range(10, 3 - 1, -1):
-    mass_fin_diff.append(get_fin_diff(func, (linspace(*range_graph, i)).tolist()))
+for index in range(10, 3 - 1, -1):
+    mass_fin_diff.append(get_fin_diff(func, (linspace(*range_graph, index)).tolist()))
+    step_grid = (range_graph[1] - range_graph[0]) / (index - 1)
+    x_points = linspace(*range_graph, index).tolist()
+    mass_grid_step.append((step_grid, x_points))
 
 # pprint(mass_fin_diff, compact=True)
 
 for index, cur_point in enumerate(mass_points):
     # <=10
-    for cur_count_points in range(5, 3 - 1, -1):
+    for cur_count_points in range(10, 3 - 1, -1):
         step_grid = (range_graph[1] - range_graph[0]) / (cur_count_points - 1)
         """Шаг сетки"""
         x_points = linspace(*range_graph, cur_count_points).tolist()
