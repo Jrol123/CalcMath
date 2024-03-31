@@ -163,7 +163,6 @@ def redirector(point: float, points: list[float], step: float, mass_fin_dir: lis
             return None
         case ResponseCode.NO_FUNC:
             return None
-        # TODO: Добавить возвращение функций
 
 
 def check_pos(point: float, points: list[float]) -> tuple[ResponseCode, float | None]:
