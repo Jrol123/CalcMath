@@ -46,10 +46,25 @@ def func(x: float, deriv_s: int = 0):
 
 
 def newton_fwd(point: float, points: list[float], step: float, mass_fin_dir: list[list[float]]) -> float:
-    t = (point - points[0]) / step
-    if t > 1 or t < 0:
+    """
+    Функция Ньютона вперёд.
+
+    Берётся от первой точки и вычисляет полином для точки, находящейся между первой и второй.
+    Имеется проверка на границы по t, хотя это не нужно в рамках функции check_pos.
+
+    :param point: Точка, значение функции в которой требуется узнать.
+    :param points: Сетка значений.
+    :param step: Шаг сетки.
+    :param mass_fin_dir: Массив конечных значений.
+
+    :return: Значение функции в точке.
+
+    """
+    t = (point - points[0]) / step # TODO: Вытащить вычисление t в функцию redirector. Хотя, а стоит ли?
+    if not 1 > t > 0:
         print("ALARM!", f"{point} IS BROKEN FOR NEWTON_FWD!", f"t = {t}!", sep="\t")
         return -404
+
     result = 0
     for i in range(len(points)):
         mult = mass_fin_dir[i][0]
@@ -60,10 +75,25 @@ def newton_fwd(point: float, points: list[float], step: float, mass_fin_dir: lis
 
 
 def newton_bwd(point: float, points: list[float], step: float, mass_fin_dir: list[list[float]]) -> float:
-    t = (point - points[-1]) / step
-    if t < -1 or t > 0:
+    """
+    Функция Ньютона назад.
+
+    Берётся от последней точки и вычисляет полином для точки, находящейся между предпоследней и последней.
+    Имеется проверка на границы по t, хотя это не нужно в рамках функции check_pos.
+
+    :param point: Точка, значение функции в которой требуется узнать.
+    :param points: Сетка значений.
+    :param step: Шаг сетки.
+    :param mass_fin_dir: Массив конечных значений.
+
+    :return: Значение функции в точке.
+
+    """
+    t = (point - points[-1]) / step # TODO: Вытащить вычисление t в функцию redirector. Хотя, а стоит ли?
+    if not 0 > t > -1:
         print("ALARM!", f"{point} IS BROKEN FOR NEWTON_BWD!", f"t = {t}!", sep="\t")
         return -404
+
     result = 0
     for i in range(len(points)):
         mult = mass_fin_dir[i][-1]
