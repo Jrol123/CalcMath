@@ -331,20 +331,20 @@ mass_grid = []
 
 MAX_COUNT_POINTS = 10
 """Максимальное количество точек"""
+MIN_COUNT_POINTS = 3
+"""Минимальное количество точек"""
 
 """Поскольку по условию сказано взять максимальное количество точек,
  то необходимо сгенерировать конечные разности для каждого случая"""
-for index in range(MAX_COUNT_POINTS, 3 - 1, -1):
+for index in range(MAX_COUNT_POINTS, MIN_COUNT_POINTS - 1, -1):
     fin_diff = get_fin_diff(func, (linspace(*range_graph, index)).tolist())
-    pd.DataFrame(fin_diff).to_csv(f"Newton/FiniteDifference_{index}.csv")
     mass_fin_diff.append(fin_diff)
     step_grid = (range_graph[1] - range_graph[0]) / (index - 1)
     """Шаг сетки"""
     x_points = linspace(*range_graph, index).tolist()
     """Точки сетки"""
     mass_grid.append((step_grid, x_points))
-
-# pprint(mass_fin_diff, compact=True)
+    pd.DataFrame(fin_diff, index=x_points).to_csv(f"Newton/FiniteDifference_{index}.csv")
 
 for index, cur_point in enumerate(mass_points):
     for sub_index, grid in enumerate(mass_grid):
