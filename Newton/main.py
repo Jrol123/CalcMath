@@ -329,7 +329,9 @@ MAX_COUNT_POINTS = 10
 """Поскольку по условию сказано взять максимальное количество точек,
  то необходимо сгенерировать конечные разности для каждого случая"""
 for index in range(MAX_COUNT_POINTS, 3 - 1, -1):
-    mass_fin_diff.append(get_fin_diff(func, (linspace(*range_graph, index)).tolist()))
+    fin_diff = get_fin_diff(func, (linspace(*range_graph, index)).tolist())
+    pd.DataFrame(fin_diff).to_csv(f"Newton/FiniteDifference_{index}.csv")
+    mass_fin_diff.append(fin_diff)
     step_grid = (range_graph[1] - range_graph[0]) / (index - 1)
     """Шаг сетки"""
     x_points = linspace(*range_graph, index).tolist()
