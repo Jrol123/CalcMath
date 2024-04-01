@@ -74,8 +74,8 @@ def newton_bwd(point: float, points: list[float], step: float, mass_fin_dir: lis
 
 
 def gauss_fwd(point: float, points: list[float], step: float, mass_fin_dir: list[list[float]]) -> float:
-    t = (point - points[(len(points) - 1) // 2]) / step
-    if not 0 < t < 0.5:
+    t = (point - points[(len(points) - 1) // 2]) / step # TODO: Вытащить вычисление t в функцию redirector. Хотя, а стоит ли?
+    if not 0 < t <= 0.5:
         print("ALARM!", f"{point} IS BROKEN FOR GAUSS_FWD!", f"t = {t}!", sep="\t")
         return -404
     result = 0
@@ -100,8 +100,8 @@ def gauss_fwd(point: float, points: list[float], step: float, mass_fin_dir: list
 
 
 def gauss_bwd(point: float, points: list[float], step: float, mass_fin_dir: list[list[float]]) -> float:
-    t = (point - points[(len(points) - 1) // 2]) / step
-    if not 0 > t > -0.5:
+    t = (point - points[(len(points) - 1) // 2]) / step # TODO: Вытащить вычисление t в функцию redirector. Хотя, а стоит ли?
+    if not -0.5 <= t < 0:
         print("ALARM!", f"{point} IS BROKEN FOR GAUSS_BWD!", f"t = {t}!", sep="\t")
         return -404
     result = 0
