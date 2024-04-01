@@ -91,9 +91,9 @@ def gauss_fwd(point: float, points: list[float], step: float, mass_fin_dir: list
         mult = fin_diff_step[diff_index]
         for j in range(0, i - 1 + 1):
             if j % 2 != 0:
-                mult *= (t - (j + 1) / 2)
+                mult *= (t - j)
             else:
-                mult *= (t + (j + 1) / 2)
+                mult *= (t + j)
         result += (mult / factorial(i))
 
     return result
@@ -117,9 +117,9 @@ def gauss_bwd(point: float, points: list[float], step: float, mass_fin_dir: list
         mult = fin_diff_step[diff_index]
         for j in range(0, i - 1 + 1):
             if j % 2 != 0:
-                mult *= (t + (j + 1) / 2)
+                mult *= (t + j)
             else:
-                mult *= (t - (j + 1) / 2)
+                mult *= (t - j)
         result += (mult / factorial(i))
 
     return result
