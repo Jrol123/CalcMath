@@ -74,10 +74,25 @@ def newton_bwd(point: float, points: list[float], step: float, mass_fin_dir: lis
 
 
 def gauss_fwd(point: float, points: list[float], step: float, mass_fin_dir: list[list[float]]) -> float:
+    """
+    Функция Гаусса вперёд/назад.
+
+    Берётся от последней точки и вычисляет полином для точки, находящейся между предпоследней и последней.
+    Имеется проверка на границы по t, хотя это не нужно в рамках функции check_pos.
+
+    :param point: Точка, значение функции в которой требуется узнать.
+    :param points: Сетка значений.
+    :param step: Шаг сетки.
+    :param mass_fin_dir: Массив конечных значений.
+
+    :return: Значение функции в точке.
+
+    """
     t = (point - points[(len(points) - 1) // 2]) / step # TODO: Вытащить вычисление t в функцию redirector. Хотя, а стоит ли?
     if not 0 < t <= 0.5:
         print("ALARM!", f"{point} IS BROKEN FOR GAUSS_FWD!", f"t = {t}!", sep="\t")
         return -404
+
     result = 0
     for i in range(len(points)):
 
@@ -100,10 +115,25 @@ def gauss_fwd(point: float, points: list[float], step: float, mass_fin_dir: list
 
 
 def gauss_bwd(point: float, points: list[float], step: float, mass_fin_dir: list[list[float]]) -> float:
+    """
+    Функция Гаусса назад/вперёд.
+
+    Берётся от последней точки и вычисляет полином для точки, находящейся между предпоследней и последней.
+    Имеется проверка на границы по t, хотя это не нужно в рамках функции check_pos.
+
+    :param point: Точка, значение функции в которой требуется узнать.
+    :param points: Сетка значений.
+    :param step: Шаг сетки.
+    :param mass_fin_dir: Массив конечных значений.
+
+    :return: Значение функции в точке.
+
+    """
     t = (point - points[(len(points) - 1) // 2]) / step # TODO: Вытащить вычисление t в функцию redirector. Хотя, а стоит ли?
     if not -0.5 <= t < 0:
         print("ALARM!", f"{point} IS BROKEN FOR GAUSS_BWD!", f"t = {t}!", sep="\t")
         return -404
+
     result = 0
     for i in range(len(points)):
 
