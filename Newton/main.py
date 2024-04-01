@@ -23,7 +23,7 @@ class ResponseCode(IntEnum):
     GAUSS_BWD = -GAUSS_FWD
     NO_FUNC = 404  # TODO: Что делать, если точка находится не рядом с краями и не рядом с центральным элементом?
 
-    NOT_CALCULATED = -404
+    BAD_PARAMETER = -404
 
 
 # В = 15
@@ -65,7 +65,7 @@ def newton_fwd(point: float, points: list[float], step: float, mass_fin_dir: lis
     t = (point - points[0]) / step  # TODO: Вытащить вычисление t в функцию redirector. Хотя, а стоит ли?
     if not 1 > t > 0:
         print("ALARM!", f"{point} IS BROKEN FOR NEWTON_FWD!", f"t = {t}!", sep="\t")
-        return ResponseCode.NOT_CALCULATED
+        return ResponseCode.BAD_PARAMETER
 
     result = 0
     for i in range(len(points)):
@@ -94,7 +94,7 @@ def newton_bwd(point: float, points: list[float], step: float, mass_fin_dir: lis
     t = (point - points[-1]) / step  # TODO: Вытащить вычисление t в функцию redirector. Хотя, а стоит ли?
     if not 0 > t > -1:
         print("ALARM!", f"{point} IS BROKEN FOR NEWTON_BWD!", f"t = {t}!", sep="\t")
-        return ResponseCode.NOT_CALCULATED
+        return ResponseCode.BAD_PARAMETER
 
     result = 0
     for i in range(len(points)):
@@ -124,7 +124,7 @@ def gauss_fwd(point: float, points: list[float], step: float, mass_fin_dir: list
         (len(points) - 1) // 2]) / step  # TODO: Вытащить вычисление t в функцию redirector. Хотя, а стоит ли?
     if not 0 < t <= 0.5:
         print("ALARM!", f"{point} IS BROKEN FOR GAUSS_FWD!", f"t = {t}!", sep="\t")
-        return ResponseCode.NOT_CALCULATED
+        return ResponseCode.BAD_PARAMETER
 
     result = 0
     for i in range(len(points)):
@@ -166,7 +166,7 @@ def gauss_bwd(point: float, points: list[float], step: float, mass_fin_dir: list
         (len(points) - 1) // 2]) / step  # TODO: Вытащить вычисление t в функцию redirector. Хотя, а стоит ли?
     if not -0.5 <= t < 0:
         print("ALARM!", f"{point} IS BROKEN FOR GAUSS_BWD!", f"t = {t}!", sep="\t")
-        return ResponseCode.NOT_CALCULATED
+        return ResponseCode.BAD_PARAMETER
 
     result = 0
     for i in range(len(points)):
@@ -354,7 +354,7 @@ for index, cur_point in enumerate(mass_points):
                   f"Ошибка: {state[0].name}", sep="\t")
             continue
         elif isinstance(result, ResponseCode):
-            print(f"Ошибка в ходе вычисления для точки {cur_point} при количестве точек = {cur_count_points}!",
+            print(f"Ошибка в ходе вычислений для точки {cur_point} при количестве точек = {cur_count_points}!",
                   "Проблема с параметром t!",
                   f"Используемая функция: {state[0].name}", sep="\t")
         else:
