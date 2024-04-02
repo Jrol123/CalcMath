@@ -139,10 +139,10 @@ def gauss_fwd(point: float, points: list[float], step: float, mass_fin_dir: list
         mult = fin_diff_step[diff_index]
         for j in range(0, i - 1 + 1):
             if j % 2 != 0:
-                mult *= (t - int((j + 1) / 2))
+                mult *= (t - (j + 1) // 2)
                 # mult *= (t - j)
             else:
-                mult *= (t + int((j + 1) / 2))
+                mult *= (t + (j + 1) // 2)
                 # mult *= (t + j)
                 # TODO: Разобраться, какой способ более подходящий
         result += (mult / factorial(i))
@@ -184,10 +184,10 @@ def gauss_bwd(point: float, points: list[float], step: float, mass_fin_dir: list
         mult = fin_diff_step[diff_index]
         for j in range(0, i - 1 + 1):
             if j % 2 != 0:
-                mult *= (t + int((j + 1) / 2))
+                mult *= (t + (j + 1) // 2)
                 # mult *= (t - j)
             else:
-                mult *= (t - int((j + 1) / 2))
+                mult *= (t - (j + 1) // 2)
                 # mult *= (t + j)
                 # TODO: Разобраться, какой способ более подходящий
         result += (mult / factorial(i))
@@ -329,7 +329,7 @@ mass_fin_diff = []
 mass_grid = []
 """Массив сеток"""
 
-MAX_COUNT_POINTS = 10
+MAX_COUNT_POINTS = 13
 """Максимальное количество точек"""
 MIN_COUNT_POINTS = 3
 """Минимальное количество точек"""
@@ -344,7 +344,7 @@ for index in range(MAX_COUNT_POINTS, MIN_COUNT_POINTS - 1, -1):
     x_points = linspace(*range_graph, index).tolist()
     """Точки сетки"""
     mass_grid.append((step_grid, x_points))
-    pd.DataFrame(fin_diff, index=x_points).to_csv(f"Newton/FiniteDifference_{index}.csv")
+    pd.DataFrame(fin_diff, index=x_points).to_csv(f"Finite_Differences/FiniteDifference_{index}.csv")
 
 for index, cur_point in enumerate(mass_points):
     for sub_index, grid in enumerate(mass_grid):
