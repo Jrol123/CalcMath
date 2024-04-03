@@ -47,6 +47,40 @@ def func(x: float, deriv_s: int = 0):
     return cos(x + ((deriv_s - 2) * pi) / 2)
 
 
+def get_norm(function, rng: tuple[float, float], *args) -> float:
+    """
+    Получение нормы функции
+
+    :param function: Некоторая функция, норму которой мы хотим получить
+    :param rng: Кортеж границ
+    :param args: Дополнительные аргументы функции
+
+    :return: Норма функции
+    :rtype: float
+
+    """
+    return max(abs(function(linspace(*rng, num=10 ** 3), *args)))
+
+
+def teor_error(count_points: int, rng: tuple[float, float], function) -> tuple[float, float]:
+    """
+    Получение теоретической ошибки.
+    Теоретическая ошибка берётся от максимума и минимума функции.
+
+    :param function: Функция
+    :param count_points: Количество точек
+    :param rng: Кортеж границ
+
+    :return: Теоретическая ошибка
+    :rtype: float
+
+    """
+    pts = function(linspace(*rng, num=10 ** 3), count_points + 1)
+    fct = factorial(count_points + 1)
+    diff = ((rng[1] - rng[0]) ** (count_points + 1))
+    return (min(pts) / fct) * diff, (max(pts) / fct) * diff
+
+
 def newton_fwd(point: float, points: list[float], step: float, mass_fin_dir: list[list[float]]) -> float | ResponseCode:
     """
     Функция Ньютона вперёд.
@@ -329,6 +363,9 @@ mass_fin_diff = []
 mass_grid = []
 """Массив сеток"""
 
+mass_ter_e = []
+"""Массив теоретических ошибок"""
+
 MAX_COUNT_POINTS = 13
 """Максимальное количество точек"""
 MIN_COUNT_POINTS = 3
@@ -343,11 +380,15 @@ for index in range(MAX_COUNT_POINTS, MIN_COUNT_POINTS - 1, -1):
     """Шаг сетки"""
     x_points = linspace(*range_graph, index).tolist()
     """Точки сетки"""
+    mass_ter_e.append(teor_error(index, range_graph, func))
     mass_grid.append((step_grid, x_points))
     pd.DataFrame(fin_diff, index=x_points).to_csv(f"Finite_Differences/FiniteDifference_{index}.csv")
 
 for index, cur_point in enumerate(mass_points):
+    print(f"\nПроверка точки {cur_point}")
     for sub_index, grid in enumerate(mass_grid):
+        print(f"Теоретическая ошибка минимума: {mass_ter_e[sub_index][0]}",
+              f"Теоретическая ошибка максимума: {mass_ter_e[sub_index][1]}", sep="\t")
 
         step_grid, x_points = grid
         # <=10
@@ -364,6 +405,10 @@ for index, cur_point in enumerate(mass_points):
                   "Проблема с параметром t!",
                   f"Используемая функция: {state[0].name}", sep="\t")
         else:
+            abs_e = result - func(cur_point)
             print(f"Удалось подобрать функцию для точки {cur_point} при количестве точек = {cur_count_points}",
                   f"Функция: {state[0].name}", f"Результат: {result}", sep="\t")
+            print("Абсолютная ошибка:", f"{abs_e}", sep="\t")
+            print("Попадает ли ошибка в промежуток?", f"{mass_ter_e[sub_index][0] < abs_e < mass_ter_e[sub_index][1]}",
+                  sep="\t")
             break
