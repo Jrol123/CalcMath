@@ -5,7 +5,7 @@ import pandas as pd
 
 
 
-def lagrange(bp: float, points: list[tuple[float, float]]) -> float:
+def lagrange(bp: float, points: list[tuple[float, float]], step: float) -> float:
     """
     Неньютоновская реализация полинома Лагранжа
 
@@ -18,7 +18,24 @@ def lagrange(bp: float, points: list[tuple[float, float]]) -> float:
     :rtype: float
 
     """
-    pass
+    count_points = len(points)
+    result = 0
+    for i, point in enumerate(points):
+        mult_ = point[1] / step
+        diff = 1
+
+        for j in range(0, i - 1 + 1):
+            diff *= (i - j)
+        for j in range(i + 1, count_points):
+            diff *= (i - j)
+
+        grid_mult = 1
+        for j in range(0, i - 1 + 1):
+            for j1
+        for j in range(i + 1, count_points):
+            pass
+
+    return result
 
 # В - 15
 def func(x: float, deriv_s: int = 0):
