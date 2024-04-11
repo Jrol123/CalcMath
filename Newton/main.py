@@ -1,6 +1,5 @@
 from enum import IntEnum
 from math import factorial
-from pprint import pprint
 
 from numpy import cos, sin, pi, linspace
 
