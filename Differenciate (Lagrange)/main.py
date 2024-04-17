@@ -1,7 +1,5 @@
 from math import factorial
-from numpy import cos, sin, pi, linspace, prod
-
-import pandas as pd
+from numpy import cos, sin, pi, linspace
 
 
 def lagrange(num_point: int, points: list[tuple[float, float]], step: float) -> float:
@@ -73,8 +71,8 @@ def func(x: float, deriv_s: int = 0):
     return cos(x + ((deriv_s - 2) * pi) / 2)
 
 
-def teor_error(num_point: int, step: float, count_points: int, rng: tuple[float, float], function) -> tuple[
-    float, float]:
+def teor_error(num_point: int, step: float,
+               count_points: int, rng: tuple[float, float], function) -> tuple[float, float]:
     """
     Получение первой производной от теоретической ошибки.
     Теоретическая ошибка берётся от максимума и минимума функции.
