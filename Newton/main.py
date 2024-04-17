@@ -408,6 +408,6 @@ for index, cur_point in enumerate(mass_points):
             print(f"Удалось подобрать функцию для точки {cur_point} при количестве точек = {cur_count_points}",
                   f"Функция: {state[0].name}", f"Результат: {result}", sep="\t")
             print("Абсолютная ошибка:", f"{abs_e}", sep="\t")
-            print("Попадает ли ошибка в промежуток?", f"{mass_ter_e[sub_index][0] < abs_e < mass_ter_e[sub_index][1]}",
+            print("Попадает ли ошибка в промежуток?", mass_ter_e[sub_index][0] < abs_e < mass_ter_e[sub_index][1],
                   sep="\t")
             break

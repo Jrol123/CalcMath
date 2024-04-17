@@ -118,7 +118,17 @@ if __name__ == "__main__":
 
     res_lagrange = lagrange(index_point, mass_points, step_grid)
     res_func = func(mass_points[index_point][0], k)
-    print(round(res_lagrange, koef_round),
-          round(res_func, koef_round),
-          round(abs(res_lagrange - res_func), koef_round),
-          sep='\t')
+
+    min_ter, max_ter = map(lambda num: round(num, koef_round), teor_error(count_pts, range_graph, func))
+
+    print(f"Лагранж:\t{round(res_lagrange, koef_round)}",
+          f"Значение производной функции:\t{round(res_func, koef_round)}",
+          f"Разница:\t{round(abs(res_lagrange - res_func), koef_round)}",
+          sep='\n')
+    print()
+    print(f"Минимальная ошибка:\t{min_ter}",
+          f"Максимальная ошибка:\t{max_ter}",
+          sep='\n')
+    print()
+    print(f"Попадает ли ошибка в промежуток?:\t{min_ter < abs(res_lagrange - res_func) < max_ter}",
+          sep='\n')
