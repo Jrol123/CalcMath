@@ -1,5 +1,5 @@
 from math import factorial
-from numpy import cos, sin, pi, linspace
+from numpy import cos, sin, pi, linspace, prod
 
 import pandas as pd
 
@@ -73,29 +73,18 @@ def func(x: float, deriv_s: int = 0):
     return cos(x + ((deriv_s - 2) * pi) / 2)
 
 
-def get_norm(function, rng: tuple[float, float], *args) -> float:
+def teor_error(num_point: int, step: float, count_points: int, rng: tuple[float, float], function) -> tuple[
+    float, float]:
     """
-    Получение нормы функции
-
-    :param function: Некоторая функция, норму которой мы хотим получить
-    :type function: function
-    :param rng: Кортеж границ
-    :param args: Дополнительные аргументы функции
-
-    :return: Норма функции
-    :rtype: float
-
-    """
-    return max(abs(function(linspace(*rng, num=10 ** 3), *args)))
-
-
-def teor_error(count_points: int, rng: tuple[float, float], function) -> tuple[float, float]:
-    """
-    Получение теоретической ошибки.
+    Получение первой производной от теоретической ошибки.
     Теоретическая ошибка берётся от максимума и минимума функции.
 
     :param function: Функция
     :type function: function
+    :param num_point: Номер точки
+    :type num_point: int
+    :param step: Шаг сетки
+    :type step: float
     :param count_points: Количество точек
     :param rng: Кортеж границ
 
@@ -105,8 +94,20 @@ def teor_error(count_points: int, rng: tuple[float, float], function) -> tuple[f
     """
     pts = function(linspace(*rng, num=10 ** 3), count_points + 1)
     fct = factorial(count_points + 1)
-    diff = ((rng[1] - rng[0]) ** (count_points + 1))
-    return (min(pts) / fct) * diff, (max(pts) / fct) * diff
+
+    result: tuple[float, float] = min(pts), max(pts)
+
+    def everything_else_done(value: float) -> float:
+        sub_res = 0
+        for j in range(count_points + 1):
+            sub_mult = 1
+            for j1 in range(count_points + 1):
+                if j1 != j:
+                    sub_mult *= (num_point - j1)
+            sub_res += sub_mult
+        return value * sub_res * step ** count_points / fct
+
+    return map(everything_else_done, result)
 
 
 if __name__ == "__main__":
@@ -119,7 +120,7 @@ if __name__ == "__main__":
     res_lagrange = lagrange(index_point, mass_points, step_grid)
     res_func = func(mass_points[index_point][0], k)
 
-    min_ter, max_ter = map(lambda num: round(num, koef_round), teor_error(count_pts, range_graph, func))
+    min_ter, max_ter = map(lambda num: round(num, koef_round), teor_error(index_point, step_grid, count_pts, range_graph, func))
 
     print(f"Лагранж:\t{round(res_lagrange, koef_round)}",
           f"Значение производной функции:\t{round(res_func, koef_round)}",
