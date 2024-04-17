@@ -23,32 +23,30 @@ def lagrange(num_point: int, points: list[tuple[float, float]], step: float) -> 
     result = 0
     for i, point in enumerate(points):
         point_mult = point[1]
-        diff_mult = 1
 
-        for j in range(0, i - 1 + 1):
-            diff_mult *= (i - j)
-        for j in range(i + 1, count_points + 1):
-            diff_mult *= (i - j)
+        def diff_mult_part(a: int, b: int) -> float:
+            sub_mult = 1
+            for j in range(a, b):
+                sub_mult *= (i - j)
+            return sub_mult
 
-        grid_mult = 0
-        for j in range(0, i - 1 + 1):
-            sub_mult = 1
-            for j1 in range(0, min(i, j) - 1 + 1):
-                sub_mult *= (num_point - j1)
-            for j1 in range(min(i, j) + 1, max(i, j) - 1 + 1):
-                sub_mult *= (num_point - j1)
-            for j1 in range(max(i, j) + 1, count_points + 1):
-                sub_mult *= (num_point - j1)
-            grid_mult += sub_mult
-        for j in range(i + 1, count_points + 1):
-            sub_mult = 1
-            for j1 in range(0, min(i, j) - 1 + 1):
-                sub_mult *= (num_point - j1)
-            for j1 in range(min(i, j) + 1, max(i, j) - 1 + 1):
-                sub_mult *= (num_point - j1)
-            for j1 in range(max(i, j) + 1, count_points + 1):
-                sub_mult *= (num_point - j1)
-            grid_mult += sub_mult
+        diff_mult = diff_mult_part(0, i - 1 + 1) * diff_mult_part(i + 1, count_points + 1)
+
+        def grid_mult_part(a: int, b: int) -> float:
+            alt_mult = 0
+            for j in range(a, b):
+                sub_mult = 1
+                for j1 in range(0, min(i, j) - 1 + 1):
+                    sub_mult *= (num_point - j1)
+                for j1 in range(min(i, j) + 1, max(i, j) - 1 + 1):
+                    sub_mult *= (num_point - j1)
+                for j1 in range(max(i, j) + 1, count_points + 1):
+                    sub_mult *= (num_point - j1)
+                alt_mult += sub_mult
+            return alt_mult
+
+        grid_mult = grid_mult_part(0, i - 1 + 1) + grid_mult_part(i + 1, count_points + 1)
+
         result += point_mult / diff_mult * grid_mult
 
     return result / step
@@ -80,6 +78,7 @@ def get_norm(function, rng: tuple[float, float], *args) -> float:
     Получение нормы функции
 
     :param function: Некоторая функция, норму которой мы хотим получить
+    :type function: function
     :param rng: Кортеж границ
     :param args: Дополнительные аргументы функции
 
@@ -96,6 +95,7 @@ def teor_error(count_points: int, rng: tuple[float, float], function) -> tuple[f
     Теоретическая ошибка берётся от максимума и минимума функции.
 
     :param function: Функция
+    :type function: function
     :param count_points: Количество точек
     :param rng: Кортеж границ
 
