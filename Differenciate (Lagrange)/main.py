@@ -19,28 +19,39 @@ def lagrange(num_point: int, points: list[tuple[float, float]], step: float) -> 
     :rtype: float
 
     """
-    count_points = len(points)
+    count_points = len(points) - 1
     result = 0
     for i, point in enumerate(points):
-        point_mult = point[1] / step
+        point_mult = point[1]
         diff_mult = 1
 
         for j in range(0, i - 1 + 1):
             diff_mult *= (i - j)
-        for j in range(i + 1, count_points):
+        for j in range(i + 1, count_points + 1):
             diff_mult *= (i - j)
 
-        grid_mult = 1
-        for j in range(0, count_points):
+        grid_mult = 0
+        for j in range(0, i - 1 + 1):
+            sub_mult = 1
             for j1 in range(0, min(i, j) - 1 + 1):
-                pass
+                sub_mult *= (num_point - j1)
             for j1 in range(min(i, j) + 1, max(i, j) - 1 + 1):
-                grid_mult *= (num_point - j)
-            for j1 in range(max(i, j) + 1, count_points):
-                grid_mult *= (num_point - j)
-        result += point_mult * diff_mult * grid_mult
+                sub_mult *= (num_point - j1)
+            for j1 in range(max(i, j) + 1, count_points + 1):
+                sub_mult *= (num_point - j1)
+            grid_mult += sub_mult
+        for j in range(i + 1, count_points + 1):
+            sub_mult = 1
+            for j1 in range(0, min(i, j) - 1 + 1):
+                sub_mult *= (num_point - j1)
+            for j1 in range(min(i, j) + 1, max(i, j) - 1 + 1):
+                sub_mult *= (num_point - j1)
+            for j1 in range(max(i, j) + 1, count_points + 1):
+                sub_mult *= (num_point - j1)
+            grid_mult += sub_mult
+        result += point_mult / diff_mult * grid_mult
 
-    return result
+    return result / step
 
 
 # В - 15
@@ -60,7 +71,7 @@ def func(x: float, deriv_s: int = 0):
     if deriv_s == 0:
         return 2 * x - cos(x)
     elif deriv_s == 1:
-        return x + sin(x)
+        return 2 + sin(x)
     return cos(x + ((deriv_s - 2) * pi) / 2)
 
 
@@ -97,13 +108,17 @@ def teor_error(count_points: int, rng: tuple[float, float], function) -> tuple[f
     diff = ((rng[1] - rng[0]) ** (count_points + 1))
     return (min(pts) / fct) * diff, (max(pts) / fct) * diff
 
+
 if __name__ == "__main__":
+    koef_round = 10
     k, count_pts, index_point = 1, 5, 5
     range_graph = (0.1, 0.6)
     step_grid = (range_graph[1] - range_graph[0]) / count_pts
-    mass_points = [(pt, func(pt)) for pt in linspace(*range_graph, count_pts)]
+    mass_points = [(pt, func(pt)) for pt in linspace(*range_graph, count_pts + 1)]
 
     res_lagrange = lagrange(index_point, mass_points, step_grid)
-    res_func = func(mass_points[index_point - 1][0], k)
-    # TODO: Выходит дикий Лагранж. Необходимо пофиксить
-    print(res_lagrange, res_func, res_lagrange - res_func)
+    res_func = func(mass_points[index_point][0], k)
+    print(round(res_lagrange, koef_round),
+          round(res_func, koef_round),
+          round(abs(res_lagrange - res_func), koef_round),
+          sep='\t')
