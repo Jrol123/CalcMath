@@ -4,7 +4,7 @@
 Для каждого из методов измерить время решения задачи.
 Сделать вывод.
 """
-from numpy import exp
+from numpy import exp, log, sign
 from datetime import datetime, timedelta
 
 
@@ -64,11 +64,17 @@ def newton(f, x_mass: tuple[float, float, float]) -> float:
     :return: Значение x
 
     """
-    x_prev = x_mass[-1]
+    if x_mass[-1] == x_mass[1]:
+        if sign(f(x_mass[1])) == sign(f(x_mass[1], 2)):
+            x_prev = x_mass[1]
+        else:
+            x_prev = x_mass[0]
+    else:
+        x_prev = x_mass[-1]
     return x_prev - f(x_prev) / f(x_prev, 1)
 
 
-def get_result(function, mass_borders, eps) -> OutputEntity:
+def get_result(function, f, real_res, mass_borders, eps) -> OutputEntity:
     """
     Получение результатов из функций
 
@@ -81,19 +87,20 @@ def get_result(function, mass_borders, eps) -> OutputEntity:
 
     """
     mass_val = [mass_borders[0], mass_borders[1], mass_borders[-1]]
-    end_mass = [mass_val[-1]]
+    end_mass = []
     delta = abs(mass_borders[0] - mass_borders[1])
     i = 0
     date_start = datetime.now()
     while delta > eps:
-        x_cur = function(func, mass_val)
-        print(i := i + 1, mass_val[-1], x_cur)
+        x_cur = function(f, mass_val)
+        i += 1
+        # print(i := i + 1, mass_val[-1], x_cur)
         delta = abs(x_cur - mass_val[-1])
         mass_val[-1] = x_cur
         end_mass.append(x_cur)
     date_end = datetime.now()
     # print((date_end - date_start))
-    return OutputEntity(function.__name__, -0.5373, mass_val[-1], i, eps, (date_end - date_start), end_mass)
+    return OutputEntity(function.__name__, real_res, mass_val[-1], i, eps, (date_end - date_start), end_mass)
 
 
 # В - 15
@@ -111,16 +118,21 @@ def func(x: float, deriv_s: int = 0):
 
     """
     if deriv_s == 1:
-        return -exp(-x) + 2 * x
-    return exp(-x) + x ** 2 - 2
+        return 1 / (x + 2) - 1
+    elif deriv_s == 2:
+        return -1 / (x ** 2 + 4 * x + 4)
+    return log(x + 2) - x
 
 
 if __name__ == '__main__':
     # Start here
-    range_mass = [-0.75, -0.25]  # Массив границ
+    range_mass = [1, 1.5]  # Массив границ
     eps = 1e-10
-    sec_res = get_result(secant, range_mass, eps)
-    new_res = get_result(newton, range_mass, eps)
+    # 1.1462
+    #-1.8414
+    real_result = 1.1462
+    sec_res = get_result(secant, func, real_result, range_mass, eps)
+    new_res = get_result(newton, func, real_result, range_mass, eps)
 
     delta = abs(range_mass[0] - range_mass[1])
     mass_val = [range_mass[0], range_mass[1], range_mass[-1]]
@@ -136,6 +148,7 @@ if __name__ == '__main__':
         if func(prev_stat) == 0:
             break
     date_end = datetime.now()
-    dich_res = OutputEntity(dichotomy.__name__, -0.5373, prev_stat, i, eps, (date_end - date_start), mass_val)
+    dich_res = OutputEntity(dichotomy.__name__, real_result, prev_stat, i, eps, (date_end - date_start), mass_val)
 
     print(sec_res, new_res, dich_res)
+    print(new_res.results)
